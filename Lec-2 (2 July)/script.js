@@ -76,14 +76,17 @@ console.log(output)
 
 let arr3 = [1,2,3,4,5];
 // prototype
-Array.prototype.doubleArrVal = function(){
+Array.prototype.doubleArrVal = function(logic){
     let output1 = [];
     for(let i = 0 ; i < this.length ; i++){
-        output1.push(this[i] * 2);
+        output1.push(logic(this[i]));
     }
     return output1;
 }
 
 // syntax is similar to map
-let answer = arr3.doubleArrVal();
+let answer = arr3.doubleArrVal(function(x){
+    return x * 2;
+});
 console.log(answer);
+
