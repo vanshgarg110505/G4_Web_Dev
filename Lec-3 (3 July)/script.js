@@ -1,27 +1,67 @@
-let cart = [
-    { name: "shoes", price: 2000 },
-    { name: "shirt", price: 1200 },
-    { name: "wallets", price: 800 },
-    { name: "jeans", price: 2500 }
-];
+let cart = ['shoes', 'shirt', 'wallets']
 
-function orderDetail(cart){
-    // 1. total number of products
-    // 2. total amount of products 
+function orderDetail(cart) {
+    // 1. Total no of products
+    // 2. Total amount of Products nos*1000
+
+    const noOfProduct = cart.length
+    const totalAmount = noOfProduct * 1000
+    return {
+        noOfProduct: noOfProduct,
+        totalAmount: totalAmount,
+    }
 }
 
-function orderSummary(){
+function orderSummary(cart) {
     // total price and total product
-    // then genereate orderId using random generate
+    // then generate orderId
+    let orderDetails = orderDetail(cart)
+
+    let totalPrice = orderDetails.totalAmount
+    let totalProducts = orderDetails.noOfProduct
+    let orderId = Math.floor(Math.random() * 1000000)
+
+    console.log(`Order ID: ${orderId}`)
+    console.log(`Total Products: ${totalProducts}`)
+    console.log(`Total Price: Rs ${totalPrice}`)
+
+    return {
+        orderId: orderId,
+        totalPrice: totalPrice,
+        totalProducts: totalProducts,
+    }
 }
 
-function paymentGateway(){
-    // orderId, product details and price.....Write payment is successful / failed
+function paymentGateway() {
+    // orderId, product details and price.. Payment is successfull
+    let orderDetails = orderSummary(cart)
+
+    console.log(`Processing payment for Order ID: ${orderDetails.orderId}`)
+    console.log(`Payment of Rs ${orderDetails.totalPrice} is successful!`)
+
+    return {
+        paymentStatus: 'success',
+        orderDetails: orderDetails,
+    }
 }
 
-function successfulOrder(){
-    // it will give all details about the payment, product, name and evertthing
+function successfullOrder() {
+    // it will give all the details about the payment product name and everything
+    let paymentDetails = paymentGateway()
+
+    console.log('=== ORDER CONFIRMATION ===')
+    console.log(`Order ID: ${paymentDetails.orderDetails.orderId}`)
+    console.log(`Products: ${cart.join(', ')}`)
+    console.log(`Total Products: ${paymentDetails.orderDetails.totalProducts}`)
+    console.log(`Total Amount: Rs ${paymentDetails.orderDetails.totalPrice}`)
+    console.log(`Payment Status: ${paymentDetails.paymentStatus}`)
+    console.log('Thank you for your order!')
+
+    return paymentDetails
 }
+
+// Execute the complete order process
+successfullOrder()
 
 // Prototype for Filter
 
