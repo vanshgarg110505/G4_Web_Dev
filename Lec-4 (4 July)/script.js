@@ -185,3 +185,21 @@ fetchProducts();
 
 
 // If data is coming from this fetch, title, description, price in new array of object.
+
+async function fetchAndExtractProducts() {
+    try {
+        const response = await fetch('https://dummyjson.com/products');
+        const data = await response.json();
+        
+        const extracted = data.products.map(product => ({
+            title: product.title,
+            description: product.description,
+            price: product.price
+        }));
+        console.log("Extracted Products:", extracted);
+    } catch (err) {
+        console.log("Error extracting products:", err.message);
+    }
+}
+
+fetchAndExtractProducts();
