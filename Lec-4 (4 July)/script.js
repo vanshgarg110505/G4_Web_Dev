@@ -196,7 +196,28 @@ async function fetchAndExtractProducts() {
             description: product.description,
             price: product.price
         }));
-        console.log("Extracted Products:", extracted);
+
+        const productsDiv = document.getElementById("products");
+        productsDiv.innerHTML = `
+            <table border="1" cellpadding="8" cellspacing="8">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Price ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${extracted.map(product => `
+                        <tr>
+                            <td>${product.title}</td>
+                            <td>${product.description}</td>
+                            <td>${product.price}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
     } catch (err) {
         console.log("Error extracting products:", err.message);
     }
