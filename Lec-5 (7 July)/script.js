@@ -69,13 +69,44 @@ const child = document.getElementById("child");
 
 grandParent.addEventListener("click", (event) => {
     console.log("Grandparent click");
-}, true);
+    event.stopPropagation();
+}, false);
 
 
 parent.addEventListener("click", (event)=>{
     console.log("Parent Click");
-}, true)
+    event.stopPropagation();
+}, false)
 
 child.addEventListener("click", (event) => {
     console.log("Child CLick");
-}, true)
+    event.stopPropagation();
+}, false)
+
+// by default : bubbling
+/*
+grandparent
+
+parent
+grandparent
+
+child
+parent
+grandparent
+*/
+
+// event capturing
+/* 
+if we use true
+
+if we click on child :- 
+grandparent
+parent
+child 
+will be printed
+*/
+
+/*
+now if we want that we need to only print the one on which we click.
+we need to use stop propagation and false
+*/
