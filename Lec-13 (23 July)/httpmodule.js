@@ -17,6 +17,19 @@ const server = http.createServer((req, res) => {
     } else if (req.method == 'GET' && req.url == '/blog') {
         res.writeHead(200, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify(blogPost))
+    } else if (req.method == 'POST' && req.url == '/blog') {
+        let blog = ''
+        req.on('data', (chunk) => (blog += chunk))
+
+        req.on('end', () => {
+            try {
+                const blogData = JSON.parse(blog)
+                blogPost.push(blogData)
+                res.end('DATA ADDED')
+            } catch (err) {
+                console.log(err)
+            }
+        })
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' })
         res.end('NOT FOUND')
