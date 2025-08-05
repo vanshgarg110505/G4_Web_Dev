@@ -1,4 +1,9 @@
 const User = require("../models/userModel");
+const jwt = require('jsonwebtoken');
+
+const generateToken = (user) => {
+    return jwt.sign({user}, process.env.JWT_SECRET);
+}
 
 const registerUser = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -21,11 +26,32 @@ const registerUser = async (req, res) => {
         email, 
         password 
     });
-    res.status(201).json({ message: "User created successfully", newUser });
+
+    const token = generateToken(newUser);
+
+    res.status(201).json({ message: "User created successfully", token });
 };
 
-// const loginUser = () => {
+const loginUser = async (req, res) => {
+    const {email, password} = req.body;
 
-// };
+    // validation
+    if(!email || !password){
+        return res.status(400).json({ message: "Please add all mandatory fields" });
+    }
 
-module.exports = { registerUser };
+    const userExists = await User.findOne({email});
+    if(!userExists){
+        return res.status(400).json({ message: "No user found" });
+    }
+
+    // verify password
+    if(req.body.password != userExists.password){
+        return res.status(400).json({ message: "Incorrect Password" });
+    }
+
+    const token = generateToken(userExists);
+    res.status(200).json({message : "Logged In", token});
+};
+
+module.exports = { registerUser, loginUser };
