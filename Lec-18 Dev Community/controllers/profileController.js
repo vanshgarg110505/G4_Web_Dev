@@ -15,7 +15,15 @@ const createProfile = async(req,res) => {
         return res.status(400).send({message : "Please add all mandatory fields."});
     }
 
+    const existingProfile = await Profile.findOne({userId: req.user[0]._id});
+    if(existingProfile){
+        return res.status(400).json({
+            message: "Profile already exists for this user."
+        })
+    }
+
     const newProfile = await Profile.create({
+        userId: req.user[0]._id,
         imageUrl,
         summary,
         skills, 
