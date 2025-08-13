@@ -41,4 +41,34 @@ const createProfile = async(req,res) => {
     });
 }
 
-module.exports = {getProfile, createProfile};
+const updateProfileDetails = async(req, res) => {
+    try {
+        const {_id} = req.user[0]; // userid from loggedin user
+        
+        // Check if profile exists
+        const existingProfile = await Profile.findOne({ userId: _id });
+        if (!existingProfile) {
+            return res.status(404).json({
+                message: "Profile not found. Please create one first."
+            });
+        }
+
+        // Update fields (only those provided in req.body)
+        const updatedProfile = await Profile.findOneAndUpdate(
+            { userId: _id },
+            { $set: req.body },
+            { new: true, runValidators: true } // returns updated document & runs schema validators
+        );
+
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            data: updatedProfile
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
+    }
+}
+
+module.exports = {getProfile, createProfile, updateProfileDetails};
